@@ -99,7 +99,7 @@ body {
     font-size: 30px;
 }
 
-button, 
+button,
 .input-limit {
     position: absolute;
     width: 200px;
@@ -135,8 +135,9 @@ i {
 }
 
 .btn-new { top: 45px;}
-.btn-roll { top: 403px;}
-.btn-hold { top: 467px;}
+.btn-roll { top: 363px;}
+.btn-hold { top: 403px;}
+.btn-winner { top: 467px;}
 .input-limit {
     top: 530px;
     padding: 5px;

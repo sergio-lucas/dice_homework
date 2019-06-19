@@ -21,7 +21,8 @@ const diceElements = [].slice.call(document.querySelectorAll('.dice')); // conve
 
 let Gamer = function(name) {
   this.name = name,
-  this.score = 0
+  this.score = 0,
+  this.wins = 0
 };
 
 let players = [];
@@ -94,7 +95,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     document.getElementById('current-'+activePlayer).textContent = current;
 
     if (players[activePlayer].score + current >= winValue) {
-        alert(`Player ${activePlayer} won!!!`);
+        players[activePlayer].wins += 1;
+        alert(`${players[activePlayer].name} won!!!`);
     }
   }
 });
@@ -108,9 +110,39 @@ const changePlayer = () => {
   document.querySelector(`.player-${activePlayer}-panel`).classList.toggle('active');
 }
 
+const saveWinner = (playerIndex) => {
+  let winners = JSON.parse(localStorage.getItem('winners')) || [];
+  winners[playerIndex] = players[playerIndex]
+  localStorage.setItem('winners', JSON.stringify(winners));
+}
+
+const getWinners = () => {
+  let dataWinners = JSON.parse(localStorage.getItem('winners'));
+  let winners = [].concat(dataWinners);
+  winners.length > 1 ? winners.sort(function (prev, cur) {
+    if (prev.wins < cur.wins) {
+      return 1;
+    }if (prev.wins > cur.wins) {
+      return -1;
+    }
+  return 0;
+  }) : winners;
+  return winners;
+}
+
+const showWinners = () => {
+  let winners = getWinners();
+  let winnersTemplate = 'Список победителей\n';
+  winners.forEach((winner) => {
+    winnersTemplate += `Имя: ${winner.name} Количество побед: ${winner.wins}\n`
+  });
+  alert(winnersTemplate);
+}
+
 document.querySelector('.btn-hold').addEventListener('click', function() {
   players[activePlayer].score += current;
   document.querySelector(`#score-${activePlayer}`).textContent = players[activePlayer].score;
+  saveWinner(activePlayer);
   changePlayer();
 });
 
@@ -122,3 +154,5 @@ document.querySelector('.btn-new').addEventListener('click', function() {
 document.querySelector('.input-limit').addEventListener('change', function() {
   winValue = Math.abs(this.value) || DEFAULT_WIN_VALUE;
 })
+
+document.querySelector('.btn-winner').addEventListener('click', showWinners)
