@@ -9,7 +9,8 @@ GAME RULES:
 
 */
 
-const RESET_VALUE = 1;
+const RESET_VALUE = 2;
+const WIN_VALUE = 20;
 
 let scores = [0, 0];
 let activePlayer = 0;
@@ -27,24 +28,36 @@ const initGame = () => {
 
 initGame();
 
+const randomDiceValue = () => Math.floor(Math.random() * 6) + 1;
+
+const isAllowChangePlayer = (diceValues) => {
+  return diceValues.reduce((prev, curr) => {
+    return prev === curr || curr === RESET_VALUE ||  prev === RESET_VALUE
+  })
+}
+
 document.querySelector('.btn-roll').addEventListener('click', function() {
-  let dice = Math.floor(Math.random() * 6) + 1;
+  let dicesValue = [],
+      diceSum = 0;
   
   diceBlock.style.display = 'block';
   diceElements.forEach(diceElement => {
-      diceElement.src = `dice-${dice}.png`;
+    let dice = Math.floor(Math.random() * 6) + 1;
+    diceElement.src = `dice-${dice}.png`;
+    dicesValue.push(dice);
   });
 
-  if (dice !== RESET_VALUE) {
-    current += dice;
+  if (isAllowChangePlayer(dicesValue)) {
+    changePlayer();
+  } else {
+    document.getElementById('current-'+activePlayer).textContent = current;
+    diceSum = dicesValue.reduce((prev, curr) => prev + curr);
+    current += diceSum;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (scores[activePlayer] + current >= 20) {
-      alert(`Player ${activePlayer} won!!!`);
+    if (scores[activePlayer] + current >= WIN_VALUE) {
+        alert(`Player ${activePlayer} won!!!`);
     }
-    
-  } else {
-    changePlayer();
   }
 });
 
