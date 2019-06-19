@@ -111,6 +111,7 @@ const changePlayer = () => {
 }
 
 const saveWinner = (playerIndex) => {
+  if (players[playerIndex].wins === 0 ) return;
   let winners = JSON.parse(localStorage.getItem('winners')) || [];
   winners[playerIndex] = players[playerIndex]
   localStorage.setItem('winners', JSON.stringify(winners));
