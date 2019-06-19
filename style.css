@@ -99,7 +99,8 @@ body {
     font-size: 30px;
 }
 
-button {
+button, 
+.input-limit {
     position: absolute;
     width: 200px;
     left: 50%;
@@ -136,6 +137,12 @@ i {
 .btn-new { top: 45px;}
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
+.input-limit {
+    top: 530px;
+    padding: 5px;
+    border: 1px solid;
+    text-transform: none;
+}
 
 .dice-block {
     position: absolute;

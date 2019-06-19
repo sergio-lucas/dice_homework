@@ -10,12 +10,13 @@ GAME RULES:
 */
 
 const RESET_VALUE = 2;
-const WIN_VALUE = 20;
+const DEFAULT_WIN_VALUE = 100;
+let winValue = DEFAULT_WIN_VALUE;
 
 let scores = [0, 0];
 let activePlayer = 0;
 let current = 0;
-const diceBlock =document.querySelector('.dice-block');
+const diceBlock = document.querySelector('.dice-block');
 const diceElements = [].slice.call(document.querySelectorAll('.dice')); // convert node elements to array
 
 const initGame = () => {
@@ -55,7 +56,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     current += diceSum;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (scores[activePlayer] + current >= WIN_VALUE) {
+    if (scores[activePlayer] + current >= winValue) {
         alert(`Player ${activePlayer} won!!!`);
     }
   }
@@ -80,3 +81,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
 document.querySelector('.btn-new').addEventListener('click', function() {
   initGame();
 });
+
+document.querySelector('.input-limit').addEventListener('change', function() {
+  winValue = Math.abs(this.value) || DEFAULT_WIN_VALUE;
+})
