@@ -10,20 +10,57 @@ GAME RULES:
 */
 
 const RESET_VALUE = 2;
+const PLAYERS = 2;
 const DEFAULT_WIN_VALUE = 100;
 let winValue = DEFAULT_WIN_VALUE;
 
-let scores = [0, 0];
 let activePlayer = 0;
 let current = 0;
 const diceBlock = document.querySelector('.dice-block');
 const diceElements = [].slice.call(document.querySelectorAll('.dice')); // convert node elements to array
+
+let Gamer = function(name) {
+  this.name = name,
+  this.score = 0
+};
+
+let players = [];
+
+
+Gamer.prototype.getScore  = function() {
+  return this.score;
+};
+
+Gamer.prototype.setScore  = function(newScore) {
+  return this.score = newScore;
+};
+
+Gamer.prototype.resetScore  = function() {
+  return this.score = 0;
+};
+
+const askNewPlayer = (newPlayerIndex) => {
+  let newPlayerName = prompt(`Введите имя ${newPlayerIndex} игрока`) || `ИГРОК ${newPlayerIndex}`
+  return newPlayerName;
+}
+
+const createPlayers = () => {
+  for (let index = 0; index < PLAYERS; index++) {
+    let current = `${index + 1}`;
+    let playerName = askNewPlayer(current);
+    let player = new Gamer(playerName);
+    players.push(player);
+    document.querySelector(`#name-${index}`).textContent = player.name;
+    document.querySelector(`#score-${index}`).textContent = player.score;
+  }
+}
 
 const initGame = () => {
   document.querySelector('#current-0').textContent = 0;
   document.querySelector('#current-1').textContent = 0;
   document.querySelector('#score-0').textContent = 0;
   document.querySelector('#score-1').textContent = 0;
+  createPlayers()
   diceBlock.style.display = 'none';
 }
 
@@ -56,7 +93,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     current += diceSum;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (scores[activePlayer] + current >= winValue) {
+    if (players[activePlayer].score + current >= winValue) {
         alert(`Player ${activePlayer} won!!!`);
     }
   }
@@ -72,8 +109,8 @@ const changePlayer = () => {
 }
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
-  scores[activePlayer] += current;
-  document.querySelector(`#score-${activePlayer}`).textContent = scores[activePlayer];
+  players[activePlayer].score += current;
+  document.querySelector(`#score-${activePlayer}`).textContent = players[activePlayer].score;
   changePlayer();
 });
 
