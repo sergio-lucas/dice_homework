@@ -99,7 +99,8 @@ body {
     font-size: 30px;
 }
 
-button {
+button,
+.input-limit {
     position: absolute;
     width: 200px;
     left: 50%;
@@ -134,15 +135,25 @@ i {
 }
 
 .btn-new { top: 45px;}
-.btn-roll { top: 403px;}
-.btn-hold { top: 467px;}
+.btn-roll { top: 363px;}
+.btn-hold { top: 403px;}
+.btn-winner { top: 467px;}
+.input-limit {
+    top: 530px;
+    padding: 5px;
+    border: 1px solid;
+    text-transform: none;
+}
 
-.dice {
+.dice-block {
     position: absolute;
     left: 50%;
     top: 178px;
     transform: translateX(-50%);
+}
+.dice {
     height: 100px;
+    margin: 5px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
 }
 

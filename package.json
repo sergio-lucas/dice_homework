@@ -1,0 +1,27 @@
+{
+  "name": "dice_homework",
+  "version": "1.0.1",
+  "description": "Dice game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node_modules/.bin/webpack --mode=production",
+    "dev": "node_modules/.bin/webpack --mode=development --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergio-lucas/dice_homework.git"
+  },
+  "author": "Sergey Lukianchuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sergio-lucas/dice_homework/issues"
+  },
+  "homepage": "https://github.com/sergio-lucas/dice_homework#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5"
+  }
+}
