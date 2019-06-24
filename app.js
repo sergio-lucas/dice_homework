@@ -19,10 +19,10 @@ let current = 0;
 const diceBlock = document.querySelector('.dice-block');
 const diceElements = [].slice.call(document.querySelectorAll('.dice')); // convert node elements to array
 
-let Gamer = function(name) {
+let Gamer = function({name, wins}) {
   this.name = name,
   this.score = 0,
-  this.wins = 0
+  this.wins = wins || 0
 };
 
 let players = [];
@@ -45,11 +45,28 @@ const askNewPlayer = (newPlayerIndex) => {
   return newPlayerName;
 }
 
+const getPlayer = (userName) => {
+  return localStorage.getItem(userName);
+}
+
 const createPlayers = () => {
+  players = [];
   for (let index = 0; index < PLAYERS; index++) {
     let current = `${index + 1}`;
-    let playerName = askNewPlayer(current);
-    let player = new Gamer(playerName);
+    let name = askNewPlayer(current);
+    let player = null;
+    let oldPlayer = getPlayer(name);
+    if (oldPlayer) {
+      let isUserCreated = confirm('Пользователь с таким именем уже существует. Продолжить?');
+      if (isUserCreated) {
+        player = new Gamer(JSON.parse(oldPlayer));
+      } else {
+        let name = prompt('Введите другое имя');
+        player = new Gamer({name});
+      }
+    } else {
+      player = new Gamer({name});
+    }
     players.push(player);
     document.querySelector(`#name-${index}`).textContent = player.name;
     document.querySelector(`#score-${index}`).textContent = player.score;
@@ -61,7 +78,7 @@ const initGame = () => {
   document.querySelector('#current-1').textContent = 0;
   document.querySelector('#score-0').textContent = 0;
   document.querySelector('#score-1').textContent = 0;
-  createPlayers()
+  createPlayers();
   diceBlock.style.display = 'none';
 }
 
@@ -110,16 +127,12 @@ const changePlayer = () => {
   document.querySelector(`.player-${activePlayer}-panel`).classList.toggle('active');
 }
 
-const saveWinner = (playerIndex) => {
-  if (players[playerIndex].wins === 0 ) return;
-  let winners = JSON.parse(localStorage.getItem('winners')) || [];
-  winners[playerIndex] = players[playerIndex]
-  localStorage.setItem('winners', JSON.stringify(winners));
+const saveWinner = (winner) => {
+  localStorage.setItem(winner.name, JSON.stringify(winner));
 }
 
 const getWinners = () => {
-  let dataWinners = JSON.parse(localStorage.getItem('winners'));
-  let winners = [].concat(dataWinners);
+  const winners = Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)));
   winners.length > 1 ? winners.sort(function (prev, cur) {
     if (prev.wins < cur.wins) {
       return 1;
@@ -141,9 +154,10 @@ const showWinners = () => {
 }
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
-  players[activePlayer].score += current;
-  document.querySelector(`#score-${activePlayer}`).textContent = players[activePlayer].score;
-  saveWinner(activePlayer);
+  let player = players[activePlayer];
+  player.score += current;
+  document.querySelector(`#score-${activePlayer}`).textContent = player.score;
+  saveWinner(player);
   changePlayer();
 });
 
